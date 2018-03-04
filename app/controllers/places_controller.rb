@@ -1,9 +1,9 @@
-class PlacesController < ApplicationController
+class PlacesController < ProtectedController
   before_action :set_place, only: [:show, :update, :destroy]
 
   # GET /places
   def index
-    @places = Place.all
+    @places = current_user.places.all
 
     render json: @places
   end
@@ -15,7 +15,7 @@ class PlacesController < ApplicationController
 
   # POST /places
   def create
-    @place = Place.new(place_params)
+    @place = current_user.places.build(place_params)
 
     if @place.save
       render json: @place, status: :created, location: @place
@@ -41,7 +41,7 @@ class PlacesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_place
-      @place = Place.find(params[:id])
+      @place = current_user.places.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
