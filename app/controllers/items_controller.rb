@@ -10,6 +10,8 @@ class ItemsController < ProtectedController
 
   # GET /items/1
   def show
+    @item = current_user.places.find(@place).items.find(params[:id])
+
     render json: @item
   end
 
@@ -28,6 +30,9 @@ class ItemsController < ProtectedController
 
   # PATCH/PUT /items/1
   def update
+    @item = current_user.places.find(@place).items.find(params[:id])
+    @item.place_id = current_user.places.find(item_params[:place_id]).id
+
     if @item.update(item_params)
       render json: @item
     else
@@ -37,6 +42,8 @@ class ItemsController < ProtectedController
 
   # DELETE /items/1
   def destroy
+    @item = current_user.places.find(@place).items.find(params[:id])
+
     @item.destroy
   end
 
