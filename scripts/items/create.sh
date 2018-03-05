@@ -6,6 +6,6 @@ curl "http://localhost:4741/items" \
   --data '{
     "item": {
       "item_name": "'"${ITEM}"'",
-      "place_id": "'"${PID}"'"
+      "place_id": "'"${P}"'"
     }
   }'

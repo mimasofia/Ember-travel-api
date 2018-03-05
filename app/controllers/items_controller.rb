@@ -1,5 +1,5 @@
 class ItemsController < ProtectedController
-  before_action :set_item, only: [:show, :update, :destroy]
+  before_action :set_place_id, only: [:show, :update, :destroy]
 
   # GET /items
   def index
@@ -15,7 +15,9 @@ class ItemsController < ProtectedController
 
   # POST /items
   def create
-    @item = current_user.items.build(item_params)
+    # @item = current_user.items.build(item_params)
+    @item = current_user.places.find(item_params[:place_id]).items.build(item_params)
+    @item.user_id = current_user.id
 
     if @item.save
       render json: @item, status: :created, location: @item
@@ -38,14 +40,20 @@ class ItemsController < ProtectedController
     @item.destroy
   end
 
-  private
+  # private
     # Use callbacks to share common setup or constraints between actions.
+
     def set_item
       @item = current_user.items.find(params[:id])
     end
 
+    def set_place_id
+      @place = current_user.items.find(params[:id])[:place_id]
+    end
+
     # Only allow a trusted parameter "white list" through.
     def item_params
-      params.require(:item).permit(:item_name)
+      params.require(:item).permit(:item_name, :place_id)
     end
+  private :set_place_id, :item_params
 end
